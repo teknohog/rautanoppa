@@ -31,6 +31,10 @@ differences between these implementations are mainly due to
 * Clock management (Altera PLL / Xilinx DCM)
 * Debug display
 
+It should be trivial to port these to other Xilinx or Altera boards
+with suitable I/O. The clock management code may vary between
+different chip families (e.g. this DCM might not work on a Virtex).
+
 
 Testing and usage
 -----------------
