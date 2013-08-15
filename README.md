@@ -7,10 +7,11 @@ Hardware random number generator for FPGAs
 Design
 ------
 
-Rautanoppa implements a basic HWRNG by combining the outputs of ring
-oscillators. With a sufficient number of them, the natural jitter
-produces a random stream of bits that passes the FIPS 140-2 test, as
-used in rng-tools. The bitstream is output via RS-232 serial port.
+Rautanoppa implements a basic HWRNG in Verilog, by combining the
+outputs of ring oscillators. With a sufficient number of them, the
+natural jitter produces a random stream of bits that passes the FIPS
+140-2 test, as used in rng-tools. The bitstream is output via RS-232
+serial port.
 
 The serial port (UART) code is adapted verbatim from
 https://github.com/progranism/Open-Source-FPGA-Bitcoin-Miner. A
