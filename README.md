@@ -56,3 +56,9 @@ NUM_RINGOSC until a working value is found.
 The reset button is not necessary in my experience. Its main purpose,
 in fact, is to provide a signal that cannot be optimized away, so it
 could be connected to any I/O.
+
+
+Nomenclature
+------------
+
+'Rautanoppa' is Finnish for 'iron dice' or 'hardware dice'.
