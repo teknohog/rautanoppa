@@ -1,4 +1,5 @@
 module hwrandom_core(clk, TxD, reset, disp_word);
+
    // Ring oscillators; with the common reset, use different lengths
    // to ensure they do not sync up that way
 

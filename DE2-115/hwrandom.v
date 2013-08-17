@@ -16,11 +16,11 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
 
    main_pll pll_blk (osc_clk, clk);
 
-   wire [31:0] disp_word;
-
    // 241 and 499 are both good on DE2-115 for near-perfect rngtest
    parameter NUM_RINGOSCS = 241;
-   
+
+   wire [31:0] disp_word;
+
    hwrandom_core #(.NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset), .disp_word(disp_word));
 
    output [55:0] segment;

@@ -49,6 +49,9 @@ works. It is generally quite slow if there are no hardware randomness
 sources, only a few characters per second on average, but this device
 should give you a flood of random chars.
 
+cat /proc/sys/kernel/random/entropy_avail is another way to monitor
+the overall picture of randomness sources and sinks.
+
 
 Performance
 -----------
@@ -63,14 +66,26 @@ the quality of randomness.
 Known issues
 ------------
 
+The reset button is not really necessary in my experience. Its main
+purpose, in fact, is to provide a signal that cannot be optimized
+away, so it could be connected to any unused I/O port.
+
 The quality of randomness depends on the FPGA model as well as the
 bitstream synthesis. There may even be variations across individual
 FPGAs of the same model. Generally, you should try to vary
-NUM_RINGOSCS until a working value is found.
+NUM_RINGOSCS until a working value is found. A bigger value is not
+necessarily better, though...
 
-The reset button is not necessary in my experience. Its main purpose,
-in fact, is to provide a signal that cannot be optimized away, so it
-could be connected to any I/O.
+The Nexys2 version, in particular, is very sensitive to changes in
+NUM_RINGOSCS and even the display code. My hypothesis is that the ring
+oscillators are picking up nearby electromagnetic noise, and locking
+on to a pattern (although the individual oscillators, being of
+different lengths, cannot all have the same actual frequencies).
+
+This is exacerbated by the fact that the display code in Nexys2 is
+more involved and uses different frequencies, compared to the simple
+wiring in the DE2-115. Indeed, the results seem to be better with the
+display disabled altogether (now using the DISPLAY define).
 
 
 Nomenclature
@@ -79,8 +94,8 @@ Nomenclature
 'Rautanoppa' is Finnish for 'iron dice' or 'hardware dice'.
 
 
-References
-----------
+Further reading
+---------------
 
 http://en.wikipedia.org/wiki/Ring_oscillator
 
