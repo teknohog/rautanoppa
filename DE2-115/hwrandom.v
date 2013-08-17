@@ -1,7 +1,7 @@
 // Altera version of rautanoppa, teknohog's hwrng
 
 module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
-
+   
    // DE2-115 buttons have inverted logic
    input 	      reset_button;
    wire 	      reset;
@@ -44,7 +44,7 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
    assign newbit = pair[1];
   
    reg [7:0]  temp_byte, out_byte;
-   reg [2:0]  bit_counter = 0;
+   reg [3:0]  bit_counter = 0;
 
    // Serial send
    output TxD;
@@ -72,18 +72,24 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
 
 	if (have_newbit)
 	  begin
-	     temp_byte[bit_counter] <= newbit;
-	     bit_counter <= bit_counter + 1;
+	     temp_byte[bit_counter[2:0]] <= newbit;
 
-	     if (bit_counter == 3'b111)
+	     if (bit_counter == 4'b0111)
 	       begin
 		  out_byte <= temp_byte;
 		  if (TxD_ready) TxD_start <= 1;
 		  else TxD_start <= 0;
 
+		  // Wait stage to ensure that the same byte cannot be
+		  // sent twice. This will waste one new bit per byte,
+		  // but I think we can afford it ;)
+		  bit_counter <= 4'b1111;
+		  
 		  disp_word <= disp_word << 8;
 		  disp_word[7:0] <= out_byte;
-	       end
+	       end // if (bit_counter == 4'b0111)
+	     else
+	       bit_counter <= bit_counter + 1;
 	  end
      end
 
@@ -105,18 +111,3 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
 
    hexdisp disp(.inword(disp_word_copy), .outword(segment_data));
 endmodule   
-
-// 2013-08-13 DE2-115 version at 101 ringoscs needs reset to get
-// started, and it seems to sync up in a few seconds... so perhaps a
-// regular automatic reset is needed. The rngtest results are fine
-// when resetting manually every second or so...
-
-// Auto reset: 101 ringoscs fails, 241 better but not perfect... try
-// with a random reset period... nope, it won't reset, so back to
-// fixed reset period and more ringoscs.
-
-// Duh! The button logic in DE2-115 is inverted, as noted in
-// DE2_115_cluster/fpgaminer_top.v, so let's try the reset button
-// again... works fine with 101 ringoscs :) There are still very
-// occasional errors in rngtest, so increasing ringoscs. 241 seems
-// better but still not perfect; 127 is bad, 499 as good as 241.
