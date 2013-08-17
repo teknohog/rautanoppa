@@ -25,13 +25,13 @@ module hwrandom (osc_clk, TxD, reset, segment, anode, disp_switch);
    // Primes are nice; 73 and 101 were enough for good randomness, 137
    // was too much for the Spartan 3E 500k. 127 was bad again --
    // perhaps a routing glitch at the chip limit.
-   parameter NUM_RINGOSC = 101;
+   parameter NUM_RINGOSCS = 101;
 
-   wire [NUM_RINGOSC-1:0] ringout;
+   wire [NUM_RINGOSCS-1:0] ringout;
 
    generate
       genvar 	      i;
-      for (i = 0; i < NUM_RINGOSC; i = i + 1)
+      for (i = 0; i < NUM_RINGOSCS; i = i + 1)
 	begin: for_ringosc
 	   ringosc #(.NUMGATES(i + 1)) osc (.reset(reset), .clkout(ringout[i]));
 	end

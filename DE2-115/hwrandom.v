@@ -18,13 +18,13 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
    // to ensure they do not sync up that way
 
    // 241 and 499 are both good on DE2-115 for near-perfect rngtest
-   parameter NUM_RINGOSC = 241;
+   parameter NUM_RINGOSCS = 241;
 
-   wire [NUM_RINGOSC-1:0] ringout;
+   wire [NUM_RINGOSCS-1:0] ringout;
 
    generate
       genvar 	      i;
-      for (i = 0; i < NUM_RINGOSC; i = i + 1)
+      for (i = 0; i < NUM_RINGOSCS; i = i + 1)
 	begin: for_ringosc
 	   ringosc #(.NUMGATES(i + 1)) osc (.reset(reset), .clkout(ringout[i]));
 	end

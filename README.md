@@ -66,7 +66,7 @@ Known issues
 The quality of randomness depends on the FPGA model as well as the
 bitstream synthesis. There may even be variations across individual
 FPGAs of the same model. Generally, you should try to vary
-NUM_RINGOSC until a working value is found.
+NUM_RINGOSCS until a working value is found.
 
 The reset button is not necessary in my experience. Its main purpose,
 in fact, is to provide a signal that cannot be optimized away, so it
