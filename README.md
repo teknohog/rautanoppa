@@ -77,3 +77,15 @@ Nomenclature
 ------------
 
 'Rautanoppa' is Finnish for 'iron dice' or 'hardware dice'.
+
+
+References
+----------
+
+http://en.wikipedia.org/wiki/Ring_oscillator
+
+http://www.csm.ornl.gov/~dunigan/fips140.txt -- Specifies the test used by rng-tools
+
+http://www.xilinx.com/products/boards/s3estarter/files/s3esk_frequency_counter.pdf -- Ring oscillator implementation on page 9
+
+http://www.cosic.esat.kuleuven.be/publications/article-790.ps -- includes statistical analysis on the randomness produced this way
