@@ -44,6 +44,21 @@ package. The script sets up the computer's serial port and runs
 rngtest. After a succesful test, you can use rngd from the same
 package to import the randomness into your system entropy pool.
 
+Once rngd is running, you can cat /dev/random to check that it
+works. It is generally quite slow if there are no hardware randomness
+sources, only a few characters per second on average, but this device
+should give you a flood of random chars.
+
+
+Performance
+-----------
+
+The serial port is easily maxed out at the default 115200 baud,
+producing about 90 Kibits/s for rngd. This is similar to the rate of
+TPM modules, and the effect on /dev/random output is drastic. The code
+should work on higher baud rates, but may require tweaking to maintain
+the quality of randomness.
+
 
 Known issues
 ------------
