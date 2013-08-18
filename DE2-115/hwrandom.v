@@ -1,6 +1,12 @@
 // Altera version of rautanoppa, teknohog's hwrng
 
 module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
+
+`ifdef NUM_PORTS
+   parameter NUM_PORTS = `NUM_PORTS;
+`else
+   parameter NUM_PORTS = 1;
+`endif
    
    // DE2-115 buttons have inverted logic
    input 	      reset_button;
@@ -10,18 +16,23 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
    input       osc_clk;
    wire  clk;
 
-   output TxD;
+   output [NUM_PORTS-1:0] TxD;
    
    parameter comm_clk_frequency = 50_000_000;
 
    main_pll pll_blk (osc_clk, clk);
 
    // 241 and 499 are both good on DE2-115 for near-perfect rngtest
+   // 337 is near-perfect for 2 ports
+`ifdef NUM_RINGOSCS
+   parameter NUM_RINGOSCS = `NUM_RINGOSCS;
+`else
    parameter NUM_RINGOSCS = 241;
-
+`endif
+   
    wire [31:0] disp_word;
 
-   hwrandom_core #(.NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset), .disp_word(disp_word));
+   hwrandom_core #(.NUM_PORTS(NUM_PORTS), .NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset), .disp_word(disp_word));
 
    output [55:0] segment;
    input         disp_switch;

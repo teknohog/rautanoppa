@@ -42,6 +42,12 @@
 #set_location_assignment PIN_F14 -to RxD
 set_location_assignment PIN_E10 -to TxD
 
+# Dual output
+#set_location_assignment PIN_G9 -to TxD[0]
+#set_location_assignment PIN_E10 -to TxD[1]
+#set_global_assignment -name VERILOG_MACRO "NUM_PORTS=2"
+#set_global_assignment -name VERILOG_MACRO "NUM_RINGOSCS=337"
+
 # leftmost slide switch
 set_location_assignment PIN_Y23 -to disp_switch
 

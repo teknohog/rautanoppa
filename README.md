@@ -87,6 +87,29 @@ more involved and uses a number of frequencies, compared to the simple
 wiring in the DE2-115.
 
 
+Multiple outputs
+----------------
+
+A single FPGA can easily serve independent portions of entropy to
+multiple computers. Here the same engine is used with several output
+ports. This is possible because the production rate is roughly 100
+times the speed of a typical UART. The ports are fed round-robin from
+this source, and no byte is sent twice.
+
+As the same logic applies to single-port devices, these are now built
+from the same code with NUM_PORTS = 1, which is the default. For a
+dual-port DE2-115, (un)comment hwrandom.qsf accordingly.
+
+The above issues still apply: you may need to tweak NUM_RINGOSCS to
+pass rngtest, and the optimal number is likely different from the
+single-port case.
+
+Due to this construction, any correlation between the outputs is as
+good or bad as that within a single output stream. There is no
+guarantee of cryptographically acceptable randomness, but it may well
+be possible, it simply takes more testing.
+
+
 Nomenclature
 ------------
 
