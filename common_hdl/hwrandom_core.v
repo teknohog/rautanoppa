@@ -1,5 +1,7 @@
 module hwrandom_core(clk, TxD, reset, disp_word);
 
+   parameter NUM_PORTS = 1;
+   
    // Ring oscillators; with the common reset, use different lengths
    // to ensure they do not sync up that way
 
@@ -30,20 +32,38 @@ module hwrandom_core(clk, TxD, reset, disp_word);
    reg pair_counter;
    assign have_newbit = (^pair) & pair_counter;
    assign newbit = pair[1];
-  
-   reg [7:0]  temp_byte, out_byte;
+
+   // In the multiport setup, a single out_byte is enough because
+   // fpgaminer's UART makes a local copy upon TxD_start, and we only
+   // trigger one port at a time.
+   
+   // In fact, for the same reason, we don't need to copy temp_byte to
+   // out_byte for sending, we can collect newbits directly into
+   // out_byte.
+   
+   // Remember these limitations if the logic and/or UART changes....
+
+   reg [7:0]  out_byte;
    reg [3:0]  bit_counter = 0;
 
    // Serial send
-   output TxD;
+   output [NUM_PORTS-1:0] TxD;
    
-   wire   TxD_ready;
-   reg 	  TxD_start;
+   wire [NUM_PORTS-1:0]   TxD_ready;
+   reg [NUM_PORTS-1:0] 	  TxD_start;
 
    parameter comm_clk_frequency = 50_000_000;
-   
-   uart_transmitter #(.comm_clk_frequency(comm_clk_frequency)) utx (.clk(clk), .uart_tx(TxD), .rx_new_byte(TxD_start), .rx_byte(out_byte), .tx_ready(TxD_ready));
 
+   generate
+      genvar 		  j;
+      for (j = 0; j < NUM_PORTS; j = j + 1)
+	begin: for_uarts
+	   uart_transmitter #(.comm_clk_frequency(comm_clk_frequency)) utx (.clk(clk), .uart_tx(TxD[j]), .rx_new_byte(TxD_start[j]), .rx_byte(out_byte), .tx_ready(TxD_ready[j]));
+	end
+   endgenerate
+
+   reg [$clog2(NUM_PORTS)+1:0] port_counter = 0;
+   
    always @(posedge clk)
      begin
 	// De-bias
@@ -52,13 +72,23 @@ module hwrandom_core(clk, TxD, reset, disp_word);
 
 	if (have_newbit)
 	  begin
-	     temp_byte[bit_counter[2:0]] <= newbit;
+	     out_byte[bit_counter[2:0]] <= newbit;
 
 	     if (bit_counter == 4'b0111)
 	       begin
-		  out_byte <= temp_byte;
-		  if (TxD_ready) TxD_start <= 1;
-		  else TxD_start <= 0;
+		  if (TxD_ready[port_counter])
+		    begin
+		       TxD_start[port_counter] <= 1;
+
+		       // Only increment upon succesful send,
+		       // otherwise the port assignment will be, well,
+		       // random, and possibly uneven
+		       if (port_counter == NUM_PORTS-1)
+			 port_counter <= 0;
+		       else
+			 port_counter <= port_counter + 1;
+		    end
+		  else TxD_start[port_counter] <= 0;
 
 		  // Wait stage to ensure that the same byte cannot be
 		  // sent twice. This will waste one new bit per byte,
