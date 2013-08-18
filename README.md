@@ -58,9 +58,9 @@ Performance
 
 The serial port is easily maxed out at the default 115200 baud,
 producing about 90 Kibits/s for rngd. This is similar to the rate of
-TPM modules, and the effect on /dev/random output is drastic. The code
-should work on higher baud rates, but may require tweaking to maintain
-the quality of randomness.
+TPM hardware, and the effect on /dev/random output is drastic. The
+code should work on higher baud rates, but may require tweaking to
+maintain the quality of randomness.
 
 
 Known issues
@@ -83,9 +83,8 @@ on to a pattern (although the individual oscillators, being of
 different lengths, cannot all have the same actual frequencies).
 
 This is exacerbated by the fact that the display code in Nexys2 is
-more involved and uses different frequencies, compared to the simple
-wiring in the DE2-115. Indeed, the results seem to be better with the
-display disabled altogether (now using the DISPLAY define).
+more involved and uses a number of frequencies, compared to the simple
+wiring in the DE2-115.
 
 
 Nomenclature
