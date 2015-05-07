@@ -1,7 +1,11 @@
 // Altera version of rautanoppa, teknohog's hwrng
 
+`ifdef DISPLAY
 module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
-
+`else
+module hwrandom (osc_clk, TxD, reset_button);
+`endif
+   
 `ifdef NUM_PORTS
    parameter NUM_PORTS = `NUM_PORTS;
 `else
@@ -29,7 +33,8 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
 `else
    parameter NUM_RINGOSCS = 241;
 `endif
-   
+
+`ifdef DISPLAY   
    wire [31:0] disp_word;
 
    hwrandom_core #(.NUM_PORTS(NUM_PORTS), .NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset), .disp_word(disp_word));
@@ -42,4 +47,7 @@ module hwrandom (osc_clk, TxD, segment, disp_switch, reset_button);
    assign segment = disp_switch? segment_data : {56{1'b1}};
 
    hexdisp disp(.inword(disp_word), .outword(segment_data));
+`else
+   hwrandom_core #(.NUM_PORTS(NUM_PORTS), .NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset));
+`endif   
 endmodule   

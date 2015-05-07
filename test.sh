@@ -1,6 +1,12 @@
 #!/bin/bash
 
-SER=/dev/ttyS0
+if [ -n "$1" ]; then
+    SER=$1
+else
+    SER=/dev/ttyS0
+    #SER=/dev/ttyUSB0
+fi
+
 SPEED=115200
 
 # The timeout (deciseconds) seems to be essential, otherwise readers

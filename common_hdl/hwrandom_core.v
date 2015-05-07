@@ -1,5 +1,9 @@
+`ifdef DISPLAY
 module hwrandom_core(clk, TxD, reset, disp_word);
-
+`else
+module hwrandom_core(clk, TxD, reset);
+`endif
+   
    parameter NUM_PORTS = 1;
    
    // Ring oscillators; with the common reset, use different lengths
@@ -100,6 +104,7 @@ module hwrandom_core(clk, TxD, reset, disp_word);
 	  end
      end
 
+`ifdef DISPLAY
    // Debug display
    output reg [31:0] 	disp_word;
 
@@ -113,4 +118,5 @@ module hwrandom_core(clk, TxD, reset, disp_word);
 	     disp_word[7:0] <= out_byte;
 	  end
      end
+`endif
 endmodule

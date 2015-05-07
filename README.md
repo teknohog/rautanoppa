@@ -86,6 +86,11 @@ This is exacerbated by the fact that the display code in Nexys2 is
 more involved and uses a number of frequencies, compared to the simple
 wiring in the DE2-115.
 
+Since 2015-05-07 the display part is optional to build. It is mainly
+useful for basic debugging, and the randomness tests can be done via
+serial once basic operation works. Note that the Xilinx version needs
+a different UCF for the display variant.
+
 
 Multiple outputs
 ----------------

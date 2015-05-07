@@ -5,9 +5,12 @@
 `include "../common_hdl/uart_transmitter.v"
 `include "../common_hdl/ringosc.v"
 
+`ifdef DISPLAY
 `include "raw7seg.v"
-
 module hwrandom (osc_clk, TxD, reset, segment, anode, disp_switch);
+`else
+module hwrandom (osc_clk, TxD, reset);
+`endif
    
    input reset;
    input       osc_clk;
@@ -22,6 +25,7 @@ module hwrandom (osc_clk, TxD, reset, segment, anode, disp_switch);
    // 73, 101 are good for Nexys2 500k, 137 is too much, 131 seems best
    parameter NUM_RINGOSCS = 131;
 
+`ifdef DISPLAY
    wire [31:0] disp_word;
 
    hwrandom_core #(.NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset), .disp_word(disp_word));
@@ -38,4 +42,7 @@ module hwrandom (osc_clk, TxD, reset, segment, anode, disp_switch);
    assign segment = disp_switch? segment_data : {8{1'b1}};
    
    raw7seg disp(.clk(clk), .segment(segment_data), .anode(anode), .word(disp_word));
+`else
+   hwrandom_core #(.NUM_RINGOSCS(NUM_RINGOSCS), .comm_clk_frequency(comm_clk_frequency)) hwc (.clk(clk), .TxD(TxD), .reset(reset));
+`endif
 endmodule   
