@@ -1,0 +1,111 @@
+NET "osc_clk" LOC = "B8"; # Bank = 0, Pin name = IP_L13P_0/GCLK8, Type = GCLK, Sch name = GCLK0
+
+# serial port receive & transmit
+#NET "RxD" LOC = "U6";
+NET "TxD" LOC = "P9";
+
+# TTL level serial port: ja3 = txd, ja2 = rxd
+#NET "RxD" LOC = "K12";
+#NET "TxD" LOC = "L17";
+#NET "TxD" LOC = "L17" | IOSTANDARD = LVTTL;
+
+NET "disp_switch" LOC = "G18";
+
+# 0 = rightmost slide switch
+#NET "switch<0>" LOC = "G18";
+#NET "switch<1>" LOC = "H18";
+#NET "switch<2>" LOC = "K18";
+#NET "switch<3>" LOC = "K17";
+#NET "switch<4>" LOC = "L14";
+#NET "switch<5>" LOC = "L13";
+#NET "switch<6>" LOC = "N17";
+#NET "switch<7>" LOC = "R17";
+
+NET "reset" LOC = "B18";
+#NET "button<0>" LOC = "B18";
+#NET "button<1>" LOC = "D18";
+#NET "button<2>" LOC = "E18";
+#NET "button<3>" LOC = "H13";
+
+# 12 pin connectors
+#NET "JA<0>" LOC = "L15";
+#NET "JA<1>" LOC = "K12";
+#NET "JA<2>" LOC = "L17";
+#NET "JA<3>" LOC = "M15";
+#NET "JA<4>" LOC = "K13";
+#NET "JA<5>" LOC = "L16";
+#NET "JA<6>" LOC = "M14";
+#NET "JA<7>" LOC = "M16";
+
+#NET "front" LOC = "L15";
+#NET "mid" LOC = "K12";
+#NET "dummyio" LOC = "L17";
+#NET "back" LOC = "M15";
+
+#NET "ext" LOC = "M15";
+
+# FX2 connector
+#NET "PIO<0>" LOC = "B4";
+#NET "PIO<1>" LOC = "A4";
+#NET "PIO<2>" LOC = "C3";
+#NET "PIO<3>" LOC = "C4";
+#NET "PIO<4>" LOC = "B6";
+#NET "PIO<5>" LOC = "D5";
+#NET "PIO<6>" LOC = "C5";
+#NET "PIO<7>" LOC = "F7";
+#NET "PIO<8>" LOC = "E7";
+#NET "PIO<9>" LOC = "A6";
+#NET "PIO<10>" LOC = "C7";
+#NET "PIO<11>" LOC = "F8";
+#NET "PIO<12>" LOC = "D7";
+#NET "PIO<13>" LOC = "E8";
+#NET "PIO<14>" LOC = "E9";
+#NET "PIO<15>" LOC = "C9";
+#NET "PIO<16>" LOC = "A8";
+#NET "PIO<17>" LOC = "G9";
+#NET "PIO<18>" LOC = "F9";
+#NET "PIO<19>" LOC = "D10";
+#NET "PIO<20>" LOC = "A10";
+#NET "PIO<21>" LOC = "B10";
+#NET "PIO<22>" LOC = "A11";
+#NET "PIO<23>" LOC = "D11";
+#NET "PIO<24>" LOC = "E10";
+#NET "PIO<25>" LOC = "B11";
+#NET "PIO<26>" LOC = "C11";
+#NET "PIO<27>" LOC = "E11";
+#NET "PIO<28>" LOC = "F11";
+#NET "PIO<29>" LOC = "E12";
+#NET "PIO<30>" LOC = "F12";
+#NET "PIO<31>" LOC = "A13";
+#NET "PIO<32>" LOC = "B13";
+#NET "PIO<33>" LOC = "E13";
+#NET "PIO<34>" LOC = "A14";
+#NET "PIO<35>" LOC = "C14";
+#NET "PIO<36>" LOC = "D14";
+#NET "PIO<37>" LOC = "B14";
+#NET "PIO<38>" LOC = "A16";
+#NET "PIO<39>" LOC = "B16";
+
+#NET "led<7>" LOC = "R4";
+#NET "led<6>" LOC = "F4";
+#NET "led<5>" LOC = "P15";
+#NET "led<4>" LOC = "E17";
+#NET "led<3>" LOC = "K14";
+#NET "led<2>" LOC = "K15";
+#NET "led<1>" LOC = "J15";
+#NET "led<0>" LOC = "J14";
+
+# 7 segment display, in the order that fpga4fun uses
+NET "segment<7>" LOC = "L18";
+NET "segment<6>" LOC = "F18";
+NET "segment<5>" LOC = "D17";
+NET "segment<4>" LOC = "D16";
+NET "segment<3>" LOC = "G14";
+NET "segment<2>" LOC = "J17";
+NET "segment<1>" LOC = "H14";
+NET "segment<0>" LOC = "C17";
+
+NET "anode<0>" LOC = "F17";
+NET "anode<1>" LOC = "H17";
+NET "anode<2>" LOC = "C18";
+NET "anode<3>" LOC = "F15";
