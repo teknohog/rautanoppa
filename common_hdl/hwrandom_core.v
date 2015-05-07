@@ -27,15 +27,7 @@ module hwrandom_core(clk, TxD, reset);
    wire       ringxor;
    assign ringxor = ^ringout;
 
-   // De-bias and collect the bits; output only completely new bytes
-
-   // Von Neumann de-bias: split the ringxor stream into pairs and map
-   // 10 -> 1, 01 -> 0
-   reg [1:0]  pair = 2'b00;
-   wire       newbit, have_newbit;
-   reg pair_counter;
-   assign have_newbit = (^pair) & pair_counter;
-   assign newbit = pair[1];
+   // Collect the bits; output only completely new bytes
 
    // In the multiport setup, a single out_byte is enough because
    // fpgaminer's UART makes a local copy upon TxD_start, and we only
@@ -67,41 +59,34 @@ module hwrandom_core(clk, TxD, reset);
    endgenerate
 
    reg [$clog2(NUM_PORTS)+1:0] port_counter = 0;
-   
+
    always @(posedge clk)
      begin
-	// De-bias
-	pair[pair_counter] <= ringxor;
-	pair_counter <= pair_counter + 1;
+	out_byte[bit_counter[2:0]] <= ringxor;
 
-	if (have_newbit)
+	if (bit_counter == 4'b0111)
 	  begin
-	     out_byte[bit_counter[2:0]] <= newbit;
-
-	     if (bit_counter == 4'b0111)
+	     if (TxD_ready[port_counter])
 	       begin
-		  if (TxD_ready[port_counter])
-		    begin
-		       TxD_start[port_counter] <= 1;
-
-		       // Only increment upon succesful send,
-		       // otherwise the port assignment will be, well,
-		       // random, and possibly uneven
-		       if (port_counter == NUM_PORTS-1)
-			 port_counter <= 0;
-		       else
-			 port_counter <= port_counter + 1;
-		    end
-		  else TxD_start[port_counter] <= 0;
-
-		  // Wait stage to ensure that the same byte cannot be
-		  // sent twice. This will waste one new bit per byte,
-		  // but I think we can afford it ;)
-		  bit_counter <= 4'b1111;
-	       end // if (bit_counter == 4'b0111)
-	     else
-	       bit_counter <= bit_counter + 1;
-	  end
+		  TxD_start[port_counter] <= 1;
+		  
+		  // Only increment upon succesful send,
+		  // otherwise the port assignment will be, well,
+		  // random, and possibly uneven
+		  if (port_counter == NUM_PORTS-1)
+		    port_counter <= 0;
+		  else
+		    port_counter <= port_counter + 1;
+	       end
+	     else TxD_start[port_counter] <= 0;
+	     
+	     // Wait stage to ensure that the same byte cannot be
+	     // sent twice. This will waste one new bit per byte,
+	     // but I think we can afford it ;)
+	     bit_counter <= 4'b1111;
+	  end // if (bit_counter == 4'b0111)
+	else
+	  bit_counter <= bit_counter + 1;
      end
 
 `ifdef DISPLAY
